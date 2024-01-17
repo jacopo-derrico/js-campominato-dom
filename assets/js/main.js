@@ -30,6 +30,7 @@ function createBombs(num1, num2) {
 }
 
 function generateGrid(number, name) {
+    // const controller = new AbortController();
     for (let i = 1; i <= number; i++) {
         let box = document.createElement('div')
 
@@ -38,22 +39,26 @@ function generateGrid(number, name) {
         box.innerHTML = `<span>${[i]}</span>`
 
         box.addEventListener('click', function () {
+            if (gameOver === true) {
+                return
+            }
+            
             if (bombArray.includes(i)) {
                 this.classList.add('box-bomb')
                 console.log(`Cella bomba: ${[i]} -> HAI PERSO`)
-                
-                // this.removeEventListener('click', function)
-                // gameOver = true
+
+                gameOver = true
+                // controller.abort()
+
             } else {
                 this.classList.add('box-active')
                 console.log(`Cella numero: ${[i]}`)
             }
-        })
+        }
+            // , { signal: controller.signal }
+        )
         gridHTML.append(box)
 
-        // if (gameOver === true) {
-        //     return
-        // }
     }
     console.log(bombArray)
 
