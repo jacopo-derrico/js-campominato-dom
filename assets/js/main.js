@@ -9,6 +9,7 @@ let gridHTML = document.getElementById('grid')
 let difficultySelection = document.getElementById('difficulty')
 
 let bombArray = []
+let gameOver = false
 
 function randomNumber(max) {
     return Math.floor(Math.random() * max + 1)
@@ -17,6 +18,7 @@ function randomNumber(max) {
 gridHTML.innerHTML = "<h2>Scegli una difficoltà e comincia a giocare!</h2>"
 
 function createBombs(num1, num2) {
+    bombArray = []
     do {
         let randomBomb = randomNumber(num2)
 
@@ -26,8 +28,6 @@ function createBombs(num1, num2) {
         }
     } while (bombArray.length !== num1);
 }
-console.log(createBombs(16, 100))
-console.log(bombArray)
 
 function generateGrid(number, name) {
     for (let i = 1; i <= number; i++) {
@@ -38,12 +38,25 @@ function generateGrid(number, name) {
         box.innerHTML = `<span>${[i]}</span>`
 
         box.addEventListener('click', function () {
-            this.classList.toggle('box-active')
-            console.log(`Cella numero: ${[i]}`)
+            if (bombArray.includes(i)) {
+                this.classList.add('box-bomb')
+                console.log(`Cella bomba: ${[i]} -> HAI PERSO`)
+                
+                // this.removeEventListener('click', function)
+                // gameOver = true
+            } else {
+                this.classList.add('box-active')
+                console.log(`Cella numero: ${[i]}`)
+            }
         })
-
         gridHTML.append(box)
+
+        // if (gameOver === true) {
+        //     return
+        // }
     }
+    console.log(bombArray)
+
 }
 
 playBtn.addEventListener('click', function () {
@@ -54,11 +67,12 @@ playBtn.addEventListener('click', function () {
 
     if (difficultyValue === 'easy') {
         createBombs(16, 100)
-        con
-        return generateGrid(100, 'box-easy')
+        generateGrid(100, 'box-easy')
     } else if (difficultyValue === 'medium') {
-        return generateGrid(81, 'box-medium')
+        createBombs(16, 81)
+        generateGrid(81, 'box-medium')
     } else {
-        return generateGrid(49, 'box-hard')
+        createBombs(16, 49)
+        generateGrid(49, 'box-hard')
     }
 })
