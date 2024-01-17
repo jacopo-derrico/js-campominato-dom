@@ -11,6 +11,11 @@ let difficultySelection = document.getElementById('difficulty')
 let bombArray = []
 let gameOver = false
 
+let scoreHTML = document.getElementById('score')
+let score = 0
+
+let endGame = document.getElementById('result')
+
 function randomNumber(max) {
     return Math.floor(Math.random() * max + 1)
 }
@@ -30,7 +35,6 @@ function createBombs(num1, num2) {
 }
 
 function generateGrid(number, name) {
-    // const controller = new AbortController();
     for (let i = 1; i <= number; i++) {
         let box = document.createElement('div')
 
@@ -38,25 +42,38 @@ function generateGrid(number, name) {
 
         box.innerHTML = `<span>${[i]}</span>`
 
-        box.addEventListener('click', function () {
+
+        function boxBehavior() {
             if (gameOver === true) {
                 return
-            }
-            
+            } 
+
             if (bombArray.includes(i)) {
                 this.classList.add('box-bomb')
                 console.log(`Cella bomba: ${[i]} -> HAI PERSO`)
 
                 gameOver = true
-                // controller.abort()
+                endGame.innerHTML = "Hai perso!"
+                box.removeEventListener('click', boxBehavior)
 
             } else {
                 this.classList.add('box-active')
                 console.log(`Cella numero: ${[i]}`)
+
+                score++
+                scoreHTML.innerHTML = `Score: ${score}`
+
+                
+                box.removeEventListener('click', boxBehavior)
+                if (score === (number - 16)) {
+                    endGame.innerHTML = "Hai vinto!"
+                    return
+                }
             }
         }
-            // , { signal: controller.signal }
-        )
+
+        box.addEventListener('click', boxBehavior)
+
         gridHTML.append(box)
 
     }
@@ -64,9 +81,13 @@ function generateGrid(number, name) {
 
 }
 
-playBtn.addEventListener('click', function () {
 
+playBtn.addEventListener('click', function () {
+    gameOver = false
+    score = 0
     gridHTML.innerHTML = ""
+    scoreHTML.innerHTML = "Score: 0"
+    endGame.innerHTML = ""
 
     let difficultyValue = difficultySelection.value
 
