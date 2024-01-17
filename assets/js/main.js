@@ -8,8 +8,26 @@ let playBtn = document.getElementById('playBtn')
 let gridHTML = document.getElementById('grid')
 let difficultySelection = document.getElementById('difficulty')
 
-gridHTML.innerHTML = "<h2>Scegli una difficoltà e comincia a giocare!"
+let bombArray = []
 
+function randomNumber(max) {
+    return Math.floor(Math.random() * max + 1)
+}
+
+gridHTML.innerHTML = "<h2>Scegli una difficoltà e comincia a giocare!</h2>"
+
+function createBombs(num1, num2) {
+    do {
+        let randomBomb = randomNumber(num2)
+
+        if (!bombArray.includes(randomBomb)) {
+
+            bombArray.push(randomBomb)
+        }
+    } while (bombArray.length !== num1);
+}
+console.log(createBombs(16, 100))
+console.log(bombArray)
 
 function generateGrid(number, name) {
     for (let i = 1; i <= number; i++) {
@@ -35,6 +53,8 @@ playBtn.addEventListener('click', function () {
     let difficultyValue = difficultySelection.value
 
     if (difficultyValue === 'easy') {
+        createBombs(16, 100)
+        con
         return generateGrid(100, 'box-easy')
     } else if (difficultyValue === 'medium') {
         return generateGrid(81, 'box-medium')
